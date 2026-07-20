@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Launch Playbook - GMR Web Team</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f6f9;color:#222;min-height:100vh}
+:root{--navy:#0D2545;--teal:#0E7A80;--teal-light:#16a8b0;--gold:#C9A84C;--bg:#f4f6f9;--white:#fff;--text:#222;--muted:#666;--border:#dde3ea}
+
+/* HEADER */
+.header{background:var(--navy);color:#fff;padding:0}
+.header-inner{max-width:1200px;margin:0 auto;padding:22px 32px;display:flex;align-items:center;justify-content:space-between}
+.header-logo{font-size:13px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.header-title{text-align:center}
+.header-title h1{font-size:22px;font-weight:700;color:#fff;letter-spacing:.5px}
+.header-title p{font-size:13px;color:rgba(255,255,255,.65);margin-top:3px}
+.header-badge{background:var(--teal);color:#fff;font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px;letter-spacing:.5px}
+
+/* NAV TABS */
+.nav-bar{background:var(--navy);border-top:1px solid rgba(255,255,255,.08)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;overflow-x:auto;padding:0 16px}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,.6);font-size:13px;font-weight:600;padding:14px 20px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;letter-spacing:.3px}
+.nav-btn:hover{color:#fff;background:rgba(255,255,255,.05)}
+.nav-btn.active{color:#fff;border-bottom-color:var(--gold)}
+
+/* CONTENT */
+.content{max-width:1200px;margin:0 auto;padding:32px 24px}
+.panel{display:none}
+.panel.active{display:block}
+
+/* CARDS */
+.card{background:var(--white);border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.07);padding:28px 32px;margin-bottom:24px}
+.card-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.card-title .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.card p{font-size:14px;line-height:1.7;color:#333;margin-bottom:10px}
+.card p:last-child{margin-bottom:0}
+
+/* SECTION LABEL */
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);margin-bottom:16px}
+
+/* BULLET LIST */
+.bullet-list{list-style:none;padding:0;margin:0}
+.bullet-list li{font-size:14px;color:#333;line-height:1.6;padding:6px 0 6px 22px;position:relative;border-bottom:1px solid var(--border)}
+.bullet-list li:last-child{border-bottom:none}
+.bullet-list li::before{content:'▸';position:absolute;left:0;color:var(--teal);font-size:12px;top:8px}
+
+/* 2-COL GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.grid-2{grid-template-columns:1fr}}
+
+/* LAYER CARDS */
+.layer-card{border-radius:10px;overflow:hidden;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.layer-header{padding:18px 24px;color:#fff;display:flex;align-items:center;gap:14px}
+.layer-num{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;flex-shrink:0}
+.layer-header h2{font-size:16px;font-weight:700}
+.layer-header p{font-size:12px;opacity:.8;margin-top:2px}
+.layer-body{background:#fff;padding:20px 24px}
+.layer-body .why-box{background:#f7f9fc;border-left:3px solid var(--teal);padding:12px 16px;border-radius:0 6px 6px 0;margin-top:14px;font-size:13px;color:#444;line-height:1.6}
+.layer-body .why-box strong{color:var(--navy);display:block;margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.8px}
+.layer-body .if-box{background:#fff8f0;border-left:3px solid #e67e22;padding:12px 16px;border-radius:0 6px 6px 0;margin-top:10px;font-size:13px;color:#555;line-height:1.6}
+.layer-body .if-box strong{color:#c0392b;display:block;margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.8px}
+
+/* LAYER COLORS */
+.l1{background:linear-gradient(135deg,#0D4A8C,#1565C0)}
+.l2{background:linear-gradient(135deg,#0E7A80,#00ACC1)}
+.l3{background:linear-gradient(135deg,#4A235A,#7B1FA2)}
+.l4{background:linear-gradient(135deg,#1A5276,#2E86C1)}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:0}
+.tl-item{display:grid;grid-template-columns:200px 1fr;gap:0;margin-bottom:4px;border-radius:10px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.07)}
+.tl-phase{padding:20px 20px;color:#fff;display:flex;flex-direction:column;justify-content:center}
+.tl-phase h3{font-size:14px;font-weight:800;letter-spacing:.3px}
+.tl-phase p{font-size:11px;opacity:.8;margin-top:4px}
+.tl-body{background:#fff;padding:18px 22px}
+.phase-1{background:linear-gradient(135deg,#1A7A4A,#27AE60)}
+.phase-2{background:linear-gradient(135deg,#0E7A80,#17A589)}
+.phase-3{background:linear-gradient(135deg,#1A3A7A,#2980B9)}
+.phase-4{background:linear-gradient(135deg,#4A235A,#884EA0)}
+@media(max-width:600px){.tl-item{grid-template-columns:1fr}.tl-phase{padding:14px 16px}}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:var(--navy);color:#fff;padding:10px 14px;text-align:left;font-size:12px;font-weight:700;letter-spacing:.5px}
+.data-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:nth-child(even) td{background:#f7f9fc}
+.check{color:var(--teal);font-weight:700;font-size:15px}
+.data-table .note-cell{color:#555;font-style:italic;font-size:12px}
+
+/* PKG TABLE */
+.pkg-table{width:100%;border-collapse:collapse;font-size:14px}
+.pkg-table th{background:var(--navy);color:#fff;padding:12px 18px;text-align:left;font-size:13px;font-weight:700}
+.pkg-table td{padding:14px 18px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+.pkg-table tr:last-child td{border-bottom:none}
+.pkg-table tr:nth-child(even) td{background:#f7f9fc}
+.pkg-name{font-weight:700;color:var(--navy)}
+
+/* HIGHLIGHT BOX */
+.highlight-box{background:linear-gradient(135deg,var(--navy),#1a3a6a);color:#fff;border-radius:10px;padding:24px 28px;margin-bottom:20px}
+.highlight-box h2{font-size:18px;font-weight:800;margin-bottom:8px}
+.highlight-box p{font-size:14px;opacity:.85;line-height:1.7}
+
+/* RESEARCH BOXES */
+.research-box{background:#f0f7ff;border:1px solid #b8d4f0;border-radius:8px;padding:16px 20px;margin-top:12px;font-size:13px;line-height:1.6;color:#333}
+.research-box strong{color:var(--navy);display:block;margin-bottom:4px}
+
+/* OPERATING LAYER */
+.op-card{background:linear-gradient(135deg,#0D2545 0%,#1a3a6a 100%);color:#fff;border-radius:10px;padding:22px 28px;margin-top:20px}
+.op-card h3{font-size:15px;font-weight:700;margin-bottom:14px;color:var(--gold)}
+.op-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.op-item{background:rgba(255,255,255,.1);border-radius:8px;padding:12px 14px;font-size:13px}
+@media(max-width:600px){.op-grid{grid-template-columns:1fr}}
+
+/* PATIENT JOURNEY */
+.journey{display:flex;gap:0;margin:20px 0;overflow-x:auto}
+.journey-step{flex:1;min-width:120px;text-align:center;padding:16px 10px;background:var(--white);border-right:1px solid var(--border);position:relative}
+.journey-step:last-child{border-right:none}
+.journey-step .step-num{width:32px;height:32px;border-radius:50%;background:var(--teal);color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.journey-step .step-name{font-size:12px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
+.journey-step .step-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+.journey{border-radius:10px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.07)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-logo">GMR Web Team</div>
+    <div class="header-title">
+      <h1>Practice Launch Playbook</h1>
+      <p>Google &amp; AI Search Marketing - Complete Acquisition, Engagement &amp; Growth System</p>
+    </div>
+    <div class="header-badge">4-Layer System</div>
+  </div>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="switchTab('overview')">Overview</button>
+    <button class="nav-btn" onclick="switchTab('layer1')">Layer 1: Website &amp; SEO</button>
+    <button class="nav-btn" onclick="switchTab('layer2')">Layer 2: GBP &amp; Directories</button>
+    <button class="nav-btn" onclick="switchTab('layer3')">Layer 3: Reputation &amp; Engagement</button>
+    <button class="nav-btn" onclick="switchTab('layer4')">Layer 4: AI Search</button>
+    <button class="nav-btn" onclick="switchTab('timeline')">Timeline</button>
+    <button class="nav-btn" onclick="switchTab('package')">Package Summary</button>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="panel-overview" class="panel active">
+    <div class="highlight-box">
+      <h2>Your Practice Launchpad</h2>
+      <p>A complete acquisition, engagement, and growth system built from zero - helping new patients find and choose your practice, keeping existing patients engaged, and positioning your practice for sustainable long-term growth.</p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="section-label">Your Starting Point</div>
+        <ul class="bullet-list">
+          <li>A multi-state launch across your target market(s), each with its own local competition and search landscape</li>
+          <li>Practice name and brand identity still being finalized</li>
+          <li>Initial patient base from referrals, plus a pipeline through your referral network and professional connections</li>
+          <li>A mixed payer model alongside cash pay</li>
+          <li>A hard deadline for branding, business cards, and patient materials by your target launch date</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="section-label">What This Means for Your Digital Presence</div>
+        <ul class="bullet-list">
+          <li>Starting from zero online: no website history, no patient reviews, no search rankings, no Google Business Profile</li>
+          <li>Competing in multiple separate markets at the same time, not one</li>
+          <li>Your specialty is one where trust, privacy, and credibility weigh heavily on a patient's decision</li>
+          <li>Every month without visibility is a month of appointment slots that stay empty</li>
+          <li>Every patient not retained is growth you have to replace from scratch</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon" style="background:#e8f4fd">🔗</div>
+        Why This Has to Work as a Connected System
+      </div>
+      <p>Getting a new patient is not a single action. It is a short sequence of steps, and each step depends on the one before it. If any layer is missing, patients can get stuck partway through this sequence - no matter how strong the other layers are.</p>
+
+      <div class="journey" style="margin-top:18px">
+        <div class="journey-step">
+          <div class="step-num">1</div>
+          <div class="step-name">Discovery</div>
+          <div class="step-desc">Patient searches on Google, a directory, or asks an AI assistant</div>
+        </div>
+        <div class="journey-step">
+          <div class="step-num">2</div>
+          <div class="step-name">Evaluation</div>
+          <div class="step-desc">Looks at 2-3 options, checks if each practice looks real and trustworthy</div>
+        </div>
+        <div class="journey-step">
+          <div class="step-num">3</div>
+          <div class="step-name">Decision</div>
+          <div class="step-desc">Chooses the most credible option and books, calls, or fills out a form</div>
+        </div>
+        <div class="journey-step">
+          <div class="step-num">4</div>
+          <div class="step-name">Reinforcement</div>
+          <div class="step-desc">If experience is good, leaves a review - helping the next patient find and trust you</div>
+        </div>
+      </div>
+
+      <p style="margin-top:16px;font-size:13px;color:#555">Each of the four layers in your launchpad corresponds to one of these steps. The system doesn't stop there - what happens after the first appointment, whether experience was positive, whether the patient returns - these reinforce the cycle for the next patient.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon" style="background:#e8f4fd">🎯</div>
+        How Google Decides Who Shows Up
+      </div>
+      <p style="margin-bottom:16px">Google's local rankings come down to three things: relevance (how well your information matches the search), distance (how close you are to the searcher), and prominence (how well-known and trusted you are). Distance is mostly fixed by geography - but relevance and prominence are built by more than one layer at once.</p>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Relevance (matches search)</th>
+            <th>Distance (places correctly)</th>
+            <th>Prominence (reviews, mentions &amp; trust)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Layer 1: Website, SEO &amp; Content</strong></td>
+            <td class="check">✓</td>
+            <td></td>
+            <td class="check">✓</td>
+          </tr>
+          <tr>
+            <td><strong>Layer 2: Google Business Profile + Directories</strong></td>
+            <td class="check">✓</td>
+            <td class="check">✓</td>
+            <td class="check">✓</td>
+          </tr>
+          <tr>
+            <td><strong>Layer 3: Reputation, Engagement &amp; Community</strong></td>
+            <td></td>
+            <td></td>
+            <td class="check">✓</td>
+          </tr>
+          <tr>
+            <td><strong>Layer 4: AI Search Visibility</strong></td>
+            <td colspan="3" class="note-cell">Runs on top of the relevance and prominence signals built by Layers 1-3</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;font-size:12px;color:var(--muted)">Source: Google Business Profile Help and Google Search Central documentation, 2026</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon" style="background:#fff3e0">🏷️</div>
+        Brand Foundation: Where Everything Starts
+      </div>
+      <p>Every layer shares one thing in common: your brand. This is the wrapper around everything else, starting with two things:</p>
+      <ul class="bullet-list" style="margin-top:12px">
+        <li>Understanding your brand persona - how your practice should look, sound, and feel to the patients you want to reach</li>
+        <li>Crafting your digital identity - your logo, color palette, and messaging, applied consistently across your website, profiles, and listings</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- LAYER 1 -->
+  <div id="panel-layer1" class="panel">
+    <div class="layer-card">
+      <div class="layer-header l1">
+        <div class="layer-num">1</div>
+        <div>
+          <h2>Website, SEO &amp; Content</h2>
+          <p>Your Digital Home Base and Growth Engine</p>
+        </div>
+      </div>
+      <div class="layer-body">
+        <p style="font-size:14px;color:#333;margin-bottom:14px"><strong>Supports:</strong> new patient acquisition today, and compounding growth over time</p>
+        <p style="font-size:14px;color:#333;margin-bottom:16px">Your website is where every other layer sends patients - so it has to load quickly, look current, explain your specialties clearly, and make it obvious how to book. Your content, blog posts written specifically for your specialty and your target patients, builds search rankings over time and establishes your authority in ways that compound long after they are published.</p>
+        
+        <div class="section-label">What's Included</div>
+        <ul class="bullet-list">
+          <li>A custom, mobile-responsive website with secure patient intake forms, appointment and contact forms, and a patient review display widget</li>
+          <li>On-page SEO collaboration and a page-one ranking strategy for the searches your future patients use</li>
+          <li>Content strategy alignment, so every piece of content supports both SEO and the patients you are trying to reach</li>
+          <li>Monthly blog posts written for your specialty</li>
+          <li>Blog publishing, sharing, and SEO tag optimization</li>
+          <li>Content outreach to build awareness of your expertise beyond your own site</li>
+        </ul>
+
+        <div class="why-box">
+          <strong>Why This Can't Be Optional</strong>
+          This layer is the foundation the other three are built on. A Google Business Profile, a directory listing, or an AI assistant can all point a patient toward your practice, but all of them need a real website to link to. Without it, there is no home base for any of the trust signals the rest of the system builds.
+        </div>
+
+        <div class="if-box">
+          <strong>If This Layer Is Weak or Missing</strong>
+          Without a strong website, every other layer is sending patients to a dead end. Local search has nothing to rank, directories have nothing useful to link to, reviews have no context, and AI assistants have no authoritative source to pull from.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 2 -->
+  <div id="panel-layer2" class="panel">
+    <div class="layer-card">
+      <div class="layer-header l2">
+        <div class="layer-num">2</div>
+        <div>
+          <h2>Google Business Profile + Directories</h2>
+          <p>Your Local Discovery Layer</p>
+        </div>
+      </div>
+      <div class="layer-body">
+        <p style="font-size:14px;color:#333;margin-bottom:14px"><strong>Supports:</strong> new patient acquisition, with ongoing value for the patients you already have</p>
+        <p style="font-size:14px;color:#333;margin-bottom:16px">This layer makes sure your practice shows up as a real, findable location in each of your target markets, both for patients searching on their own and for referred or returning patients double-checking your details online.</p>
+
+        <div class="section-label">What's Included</div>
+        <ul class="bullet-list">
+          <li>Google Business Profile setup and optimization: categories, attributes, services, description, and photos</li>
+          <li>Name, address, and phone number kept consistent across 50+ medical directories, including Healthgrades</li>
+          <li>Ongoing keyword and category optimization aimed at page-one, map-pack visibility</li>
+          <li>Up to 4 Google Business Profile posts per month to keep your listing active and current</li>
+          <li>Monitoring and insights reporting on how your listings are performing</li>
+        </ul>
+
+        <div class="why-box">
+          <strong>Why This Can't Be Optional</strong>
+          Across your target markets, this is how a patient finds a local, accurate listing for your practice. It is also how a referral from your training program or professional network gets confirmed - a referred patient will often still look you up before calling. Existing patients rely on the same listing for hours, directions, and contact details, so this layer supports retention as well as acquisition.
+        </div>
+
+        <div class="if-box">
+          <strong>If This Layer Is Weak or Missing</strong>
+          Even a strong website becomes hard to find, because most local searches are answered first by map results and directory listings, not the website itself. Referred and returning patients looking for your address or hours may find outdated or missing information, and trust begins to erode before they even arrive.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 3 -->
+  <div id="panel-layer3" class="panel">
+    <div class="layer-card">
+      <div class="layer-header l3">
+        <div class="layer-num">3</div>
+        <div>
+          <h2>Reputation, Engagement &amp; Community</h2>
+          <p>Building Trust and Keeping Patients Connected</p>
+        </div>
+      </div>
+      <div class="layer-body">
+        <p style="font-size:14px;color:#333;margin-bottom:14px"><strong>Supports:</strong> new patient acquisition through trust, and retention through ongoing engagement</p>
+        <p style="font-size:14px;color:#333;margin-bottom:16px">This layer turns a first-time visitor into a booked patient, and a booked patient into someone who returns, refers others, and stays connected to your practice. It has three connected parts.</p>
+
+        <div class="section-label" style="margin-top:8px">Online Reputation Management (ORM)</div>
+        <ul class="bullet-list">
+          <li>Positive review acquisition campaigns, including simple QR-code based tools for patients</li>
+          <li>Review management dashboard with real-time review and feedback notifications</li>
+          <li>Negative review protection and a review balancer</li>
+          <li>Professional response handling for patient feedback</li>
+          <li>Reputation reporting</li>
+          <li>Easy patient uploads</li>
+          <li>EMR integration (optional add-on) - review requests triggered directly from patient records</li>
+        </ul>
+
+        <div class="section-label" style="margin-top:18px">Patient Engagement Insights</div>
+        <p style="font-size:13px;color:#444;margin-bottom:10px">While ORM manages what is public, this part helps you understand what your patients are actually experiencing - one of the clearest ways to catch small issues before they affect retention or show up in reviews.</p>
+        <ul class="bullet-list">
+          <li>Patient satisfaction timeline, tracking how sentiment changes over time</li>
+          <li>CommentWiz (NLP analysis), surfacing themes in patient feedback automatically</li>
+          <li>Word cloud insights, a quick visual read on what patients are saying most</li>
+        </ul>
+
+        <div class="section-label" style="margin-top:18px">Social Media &amp; Community Presence</div>
+        <p style="font-size:13px;color:#444;margin-bottom:10px">Patients increasingly check social profiles alongside reviews before booking, supporting the same trust-building as ORM while giving existing patients an easy way to stay connected between visits.</p>
+        <ul class="bullet-list">
+          <li>Profile audit and optimization, or new profile creation if needed, across Facebook, Instagram, X, LinkedIn, and YouTube</li>
+          <li>Up to 10 posts per month to keep your practice visible and human between visits</li>
+        </ul>
+
+        <div class="research-box">
+          <strong>The Trust Signal</strong>
+          Consider two practices with similar websites and credentials. One has 20 reviews averaging 4.8 stars. The other has none. Many patients will choose the first, simply because the reviews feel like evidence that other people have been there, had a positive experience, and found it safe enough to say so publicly. For a specialty where patients are discussing deeply personal concerns, reviews are one of the only signals available to a prospective patient who has no personal referral.
+        </div>
+
+        <div class="why-box" style="margin-top:14px">
+          <strong>Why This Can't Be Optional</strong>
+          For specialties where patients discuss deeply personal concerns, reviews are one of the only signals available to a prospective patient who has no personal referral. Without social media and engagement, there is no ongoing connection with existing patients and no community presence to amplify your visibility between appointments.
+        </div>
+
+        <div class="if-box">
+          <strong>If This Layer Is Weak or Missing</strong>
+          The other layers can successfully bring patients to your profile, but some will leave without booking because there is nothing yet to show that other patients trust you. The practice may also struggle to retain the patients it does acquire, because there is no system to stay top-of-mind between visits.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 4 -->
+  <div id="panel-layer4" class="panel">
+    <div class="layer-card">
+      <div class="layer-header l4">
+        <div class="layer-num">4</div>
+        <div>
+          <h2>AI Search Visibility</h2>
+          <p>Where Patients Are Searching Next</p>
+        </div>
+      </div>
+      <div class="layer-body">
+        <p style="font-size:14px;color:#333;margin-bottom:14px"><strong>Supports:</strong> new patient acquisition today, and positioning for where search is headed</p>
+        <p style="font-size:14px;color:#333;margin-bottom:16px">AI assistants such as ChatGPT, Gemini, and Copilot are increasingly part of how patients research providers, and they pull what they know directly from the three layers above: your website, your Google Business Profile and directories, and your reviews. This layer optimizes specifically for AI search visibility and keeps your practice appearing accurately in AI-generated recommendations.</p>
+
+        <div class="section-label">What's Included</div>
+        <ul class="bullet-list">
+          <li>Technical optimization of your website for AI search visibility</li>
+          <li>AI-optimized content creation</li>
+          <li>Authority building through credible mentions of your practice across the web</li>
+          <li>Local AI search optimization</li>
+          <li>Continuous AI audit and performance monitoring</li>
+        </ul>
+
+        <div class="research-box">
+          <strong>How Fast AI Search Is Growing</strong>
+          According to a national survey by KFF (Kaiser Family Foundation), a significant and growing share of adults report using AI tools to research health information - a trend that has accelerated rapidly in the past two years. For specialties where privacy concerns may prevent patients from asking questions in person or in a traditional search, AI assistants are already playing a meaningful role in where patients go first.
+        </div>
+
+        <div class="why-box">
+          <strong>Why This Can't Be Optional</strong>
+          This layer depends entirely on the first three being solid. Google's own Search Central documentation states that its AI search features are built on its core search ranking systems, which means the same signals that drive traditional search rankings also shape AI visibility. AI search doesn't replace the first three layers - it amplifies them when they're in place, and fails to surface your practice when they're not.
+        </div>
+
+        <div class="if-box">
+          <strong>If This Layer Is Weak or Missing</strong>
+          Your practice is unlikely to appear in AI-generated recommendations, or an AI tool may surface outdated or incorrect information about your practice with nothing in place to correct it. As AI search grows as a primary discovery channel for health information, this gap becomes a progressively larger competitive disadvantage.
+        </div>
+      </div>
+    </div>
+
+    <div class="op-card">
+      <h3>Strategy, Reporting &amp; Support: The Operating System</h3>
+      <p style="font-size:13px;opacity:.85;margin-bottom:16px">All four layers - and the brand foundation that wraps them - are coordinated by one operating layer, included as part of your Google &amp; AI Search Marketing Package:</p>
+      <div class="op-grid">
+        <div class="op-item">📊 Monthly performance reports across all four layers</div>
+        <div class="op-item">👤 A dedicated success manager</div>
+        <div class="op-item">🔧 3 hours of website maintenance support per month</div>
+        <div class="op-item">🎧 Ongoing helpdesk support</div>
+      </div>
+      <p style="font-size:12px;opacity:.7;margin-top:14px">This is what keeps acquisition, engagement, and growth moving together - and lets the plan adjust as your practice evolves.</p>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div id="panel-timeline" class="panel">
+    <div class="card" style="margin-bottom:24px">
+      <div class="card-title">
+        <div class="icon" style="background:#e8f4fd">📅</div>
+        Your First Year: How It Comes Together
+      </div>
+      <p>Here is roughly how these layers come online and build on each other over time, from a standing start to a system that supports acquisition, engagement, and growth together.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-phase phase-1">
+          <h3>Months 1-2</h3>
+          <p>Launch</p>
+          <p style="font-size:10px;margin-top:6px;opacity:.7">Built From Zero</p>
+        </div>
+        <div class="tl-body">
+          <ul class="bullet-list">
+            <li>Website goes live with your finalized brand persona and digital identity applied consistently</li>
+            <li>Google Business Profile and directory listings set up and optimized across your target market(s)</li>
+            <li>Social profiles created or updated</li>
+            <li>First round of reviews requested from your existing patients</li>
+            <li>Foundational AI search optimization work begins</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item" style="margin-top:4px">
+        <div class="tl-phase phase-2">
+          <h3>Months 2-4</h3>
+          <p>Momentum</p>
+        </div>
+        <div class="tl-body">
+          <ul class="bullet-list">
+            <li>Monthly blog content begins publishing and getting indexed</li>
+            <li>Review volume starts to grow</li>
+            <li>AI search optimization strengthens how your practice appears in AI assistant results</li>
+            <li>First monthly performance reports show early trends</li>
+            <li>If a paid search accelerant is activated, it begins generating inquiries during this window</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item" style="margin-top:4px">
+        <div class="tl-phase phase-3">
+          <h3>Months 4-9</h3>
+          <p>Compounding</p>
+        </div>
+        <div class="tl-body">
+          <ul class="bullet-list">
+            <li>Organic search rankings begin moving for key local searches across your target markets - competitive specialties typically take longer than a single quarter to gain real traction</li>
+            <li>Reputation signals compound as review count and average rating grow</li>
+            <li>AI search visibility improves as your overall online presence matures</li>
+            <li>Referral flow from your training program or professional network combines with new digital-driven patients</li>
+            <li>Patient engagement insights begin showing meaningful patterns in satisfaction and feedback</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item" style="margin-top:4px">
+        <div class="tl-phase phase-4">
+          <h3>Month 9+</h3>
+          <p>Retention &amp; Sustainable Growth</p>
+        </div>
+        <div class="tl-body">
+          <ul class="bullet-list">
+            <li>Patient satisfaction insights guide real improvements to the patient experience</li>
+            <li>Returning patients and referrals, fueled by your growing reviews and social presence, add to new patients from search and AI</li>
+            <li>Content and social media increasingly reflect real practice milestones and outcomes, within appropriate privacy boundaries, deepening trust</li>
+            <li>Reporting shifts focus from getting found toward retention and long-term growth metrics</li>
+            <li>This is typically when a paid search scaling lever, if not already in use, becomes most valuable - for example when adding a second provider or location</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px">
+      <div class="card-title">
+        <div class="icon" style="background:#fff3e0">⚡</div>
+        Looking Ahead: Paid Search as a Scaling Lever
+      </div>
+      <p style="margin-bottom:12px">Once the four layers are in place and working together, organic visibility, local search, reputation, and AI search compound on their own. Paid search - Google Ads and related paid media - is a separate lever that can accelerate visibility during any window, but works best when the four layers are already in place to convert that paid traffic into booked patients.</p>
+      <p style="font-size:13px;color:#555">Given a goal of building patient volume quickly, this lever can also be activated earlier than usual, in parallel with the four layers above, to generate visibility while the organic system builds momentum. It is entirely optional, and separate from the Google &amp; AI Search Marketing Package.</p>
+      <div class="why-box" style="margin-top:14px">
+        <strong>Where It Fits</strong>
+        Paid traffic still depends on the foundation above - your website, Google Business Profile, and reviews - to convert into booked patients. Whether you choose to use it at launch or hold it in reserve as a scaling tool, that foundation has to be in place for it to work.
+      </div>
+    </div>
+  </div>
+
+  <!-- PACKAGE SUMMARY -->
+  <div id="panel-package" class="panel">
+    <div class="highlight-box">
+      <h2>Your Launchpad at a Glance</h2>
+      <p>Together, this is a system built from zero and designed to do three things at once: help new patients find and choose your practice, keep the patients you already have engaged and returning, and keep your practice competitive as search behavior evolves.</p>
+    </div>
+
+    <div class="card">
+      <div class="section-label">Package Overview</div>
+      <table class="pkg-table">
+        <thead>
+          <tr>
+            <th style="width:220px">Package</th>
+            <th>What It Builds</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pkg-name">Website Package</td>
+            <td>Your digital home base: a HIPAA-compliant, professionally designed website with secure intake forms, appointment forms, and review display. Built to rank and built to convert.</td>
+          </tr>
+          <tr>
+            <td class="pkg-name">Google &amp; AI Search Marketing Package</td>
+            <td>The four-layer system above: local discovery via GBP and directories, reputation and patient engagement, AI search visibility, and the operating layer that keeps all four coordinated. Plus a brand foundation workshop and digital identity build to start everything right.</td>
+          </tr>
+          <tr>
+            <td class="pkg-name">Paid Search (Optional)</td>
+            <td>A lever to accelerate visibility at launch or to scale - Google Ads and related paid media that drives immediate traffic while the organic system builds momentum. Works best after the four layers are in place.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="section-label">The Four Layers - Quick Reference</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Primary Function</th>
+            <th>Patient Journey Step</th>
+            <th>Google Ranking Signal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Website, SEO &amp; Content</strong></td>
+            <td>Digital home base + compounding growth engine</td>
+            <td>Discovery &amp; Decision</td>
+            <td>Relevance + Prominence</td>
+          </tr>
+          <tr>
+            <td><strong>2. GBP + Directories</strong></td>
+            <td>Local map pack + citation consistency</td>
+            <td>Discovery &amp; Evaluation</td>
+            <td>Relevance + Distance + Prominence</td>
+          </tr>
+          <tr>
+            <td><strong>3. Reputation, Engagement &amp; Community</strong></td>
+            <td>Trust signals + patient retention + social proof</td>
+            <td>Evaluation, Decision &amp; Reinforcement</td>
+            <td>Prominence</td>
+          </tr>
+          <tr>
+            <td><strong>4. AI Search Visibility</strong></td>
+            <td>AI assistant recommendations + future search positioning</td>
+            <td>Discovery (AI-driven)</td>
+            <td>Amplifies Layers 1-3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="section-label">What the Research Says</div>
+      <div class="grid-2">
+        <div class="research-box">
+          <strong>Mayo Clinic Proceedings - Patient Trust</strong>
+          A peer-reviewed study confirms that online reviews and social proof are among the top factors patients use when evaluating and selecting a healthcare provider, particularly for specialties where personal trust plays a larger role in the decision.
+        </div>
+        <div class="research-box">
+          <strong>KFF (Kaiser Family Foundation) - AI Health Search</strong>
+          A national survey found that a significant and growing share of adults use AI tools to research health information - a trend that has accelerated rapidly in the past two years, making AI search optimization an increasingly important component of any patient acquisition strategy.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('panel-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
